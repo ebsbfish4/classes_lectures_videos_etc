@@ -1,0 +1,10 @@
+To form an expression in bsl, you use the general form
+(<primitive> <expression> ...)
+
+You comment out in Racket with semi-colons
+
+To evaluate primitive calls, you first reduce operands to values
+and then you apply the primitive to the values
+
+Strings in racket are encased in double quote "apple" e.g
+

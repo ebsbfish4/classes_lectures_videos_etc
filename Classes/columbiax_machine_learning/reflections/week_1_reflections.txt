@@ -1,0 +1,92 @@
+This class will cover model-based techniques for extracting 
+infromation from data with an end to end task in mind.
+Many dichotomies in the course
+
+supervised learning v unsupervised
+probablistic v non-probabilistic
+modeling approach v optimizaiton techniques
+
+Supervised Learning:
+regression - use inputs to predict real-valued output
+classification - using set of inputs, predict a discrete label
+
+Unsupervised Learning:
+goal is often to uncover structure in the data. This helps with
+predictions, recommendations, efficient data exploration
+
+General flow is you have data, you have a goal, so you build
+a model that learns the hidden variables.
+
+Gaussian Distribution
+
+Probablistic Model
+a set of probability distributions on x
+we pick the distribution family, but don't know the parameter theta
+iid - independent and identically distributed
+
+Maximum likelihood estimation
+Maximum likelihood seeks the value of theta that maximizes the 
+likelihood function.
+This value best explains the data according to the chosen 
+distribution family (in this case gaussian). The maximum is
+at the peak, where the gradient is equal to zero.
+
+The logarithm trick - taking the logarithm does not change
+the location of a maximum or minimum. The value changes, but
+not the location. With this we will be able to solve.
+Depending on the choice of model, we will solve this
+1. analytically (via a simple set of equations)
+2. numerically (via an iterative algorithm using different equations)
+3. approximately (typicaly when #2 converges to local optimum)
+
+Gaussian MLE example
+M - mean of xs
+sigma = 1/n*sum((xi - mean)*(xi - mean)^T)
+
+Are we done? no
+we made model assumption
+we made an i.i.d. assumption
+we assumed that maximizing likelihood is the best thing to do.
+If the xs do not "capture the space" well, model can
+overfit the data.
+
+Linear regression
+Example - Old Faithful.
+How long will you wait on next eruption based on length
+of last eruption. One model for this is:
+(wait time) = constant + x*(eruption time)
+Objective function generally used for linear regression is
+least squares (minimizes the sum of squared errors).
+
+Example - education, seniority and income
+Input (education, seniority)
+Output (income)
+Model: (income)=(constant)+(education*weight)+(seniority*weight)
+If both weights are > 0, means that as either goes up
+income tends to go up. This is a statement about
+correlation, not causality!
+
+We think of data with d dimensions as a column vector, and
+the transposes are then stacked into a matrix called X.
+Least squares can be written in veot form as:
+LS = sum1-n(yi - xi^T*w)^2
+With gradiens ultimately yields:
+(X^TX)^-1*(X^Ty)
+where y is a column vector of the dependent variables.
+
+If the number of data points is smaller than the number of
+independent variables plus one then we cannot do least
+squares because matrix will not be invertable. We want 
+tall and skinny matrices!
+
+Linear regression is linear in respect to the weights, not
+neccessarily the inputs. For example, you could run linear 
+regression on the input x, x^2 and x^3 with different
+wieghts. This will (obviously) not return a straight line, 
+so it can be used to find better fits to a lot of data.
+
+So, we can generally perform different functions on x
+and run linear regression with all the different xs. The
+caveat, however, is that as the number of functions increases,
+we will need more data to avoid overfitting.
+

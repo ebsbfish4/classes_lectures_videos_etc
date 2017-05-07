@@ -1,0 +1,129 @@
+Four schools of thought about AI
+1. Thinking humanly
+2. Acting humanly
+3. Thinking rationally
+4. Acting rationally (design of intelligent agent)
+
+Thinking humanly-
+This requires figuring out how human thinks
+Today, cog sci and artificial intelligence are mostly different fields.
+
+Acting humanly-
+Turing test.
+Major components of AI from this perspective are:
+knowledge, reasoning, language, understanding, learning
+
+Thinking rationally - 
+Codify "right thinking" with logic
+Several greek schools developed various forms of logic,
+notation and rule of derivations for thoughts.
+Problems:
+Not all knowledge can be expressed with logical notations
+Computational blow up
+
+Acting rationally:
+Maximize goal achievement given the available infromation
+A rational agent is one that acts to achieve the best outcome
+This is the line of thought that we will use in this course.
+
+
+Applications of AI
+- Speech recognition, leverage deep neural networks to handle 
+speech recognition and natural language understanding.
+- Handwriting recognition
+- Machine translation, First systems using one-to-one correspondence
+completely failed. Tofay, statistical machine translation leverages
+vast amounts of available translated corpuses. While there is
+still room for improvement, significant progress has been 
+made.
+- Robotics, awesome progress in robotics over last few years.
+- Recommender systems have seen great improvement from AI.
+- Email spam filters.
+- Face detection and recognition
+- AI has also made incredible progress in games (chess, jeopardy, AlphaGo, etc.)
+- Autonomous driving
+- Many more applications!
+
+Foundation of AI
+- Many different people and fields intersect to work with AI.
+- Philosophy
+Logic, methods of reasoning
+Mind as a physical system that operates as a set of rules
+Mathematics -
+Logic: formal representation and proof
+Computation, algorithms
+Probability
+Economics - 
+Formal theory of rational decisions
+Combined decision theory and probability theory for decisions with uncertainty
+Game theory
+Markov decision processes.
+Neuroscience -
+How brains and computers are similar and different
+Psychology - 
+Cog psy perceives brain as info processing
+Computer Engineering - 
+Cares about how to build powerful machines to make AI possible
+E.g. self-driving cars are made possible today thanks to advances.
+Control theory and cybernetics - 
+Design simple optimal agents receiving info from env
+Modern theoy designs sys that max obj func over time
+Linguistics -
+How language and thinking are related
+
+Course roadmap
+Rational intelligent agents
+search agents
+adversarial search/games
+Machine learning
+Constraint satisfaction problems
+Logic
+Markov decision processes and reinforcement learning
+Application to natural language processing
+Application to vision and robotics
+
+Rational intelligent agents -
+Agent perceives env and acts upon to achieve some task
+Rationality is relative to how to act to max a performance measure
+Agent = architecture + program
+
+Search agents - 
+Agent work towards a goal
+Consider impact of actions on future states
+Paths come with different costs and depths
+Two kinds, uninformed and informed
+
+Adversarial search: games - 
+There is an opponent we can't control
+Game v search optimal solution is not a sequence of actions
+but a strategy
+Tedious and fragile if hard-coding
+
+Machine learning -
+Programs that improve with experience
+
+Constraint satisfaction - 
+We don't care about the path but about the goal itself
+
+Logical agents-
+Logic can be used by the agent to model the world
+Inference: given a knowledge base, given a query, output if
+knowledge bas entails query
+
+Reinforcement learning
+Agent evolves in a stochastic and uncertain environment
+and learns from reinforcement or delayed reward. Learning
+approaches for decision makinf in situations where outcomes
+are stochastic.
+Agent continues to plan and learn to affect its environment.
+Reinforcement learning agents are driven by maximizing their
+rewards on the long run
+
+Applications -
+NLP, Vision, robotics, etc.
+
+Summary -
+AI is a hardand broad field with high impact
+AI systems dont have to model human/nature but can or be inspired by
+Rationality is not always possible in complicated environment,
+but we will still aim to build rational agents
