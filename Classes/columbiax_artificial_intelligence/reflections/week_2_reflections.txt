@@ -1,0 +1,305 @@
+An agent is anything that can be viewed as
+- perceiving its environment through sensors
+- acting upon that environment through actuators
+- runs in cycles of 1) perceive, 2) think, 3) act
+
+Agent = Architecture (hardware, sensors, etc.) + Program (mind of the program, software)
+These two must be complimentary and compatible!
+E.g.
+Human agent:
+- Sensors: eyes, ears, etc.
+- Actuators: hands, legs, mouth, etc.
+Robotic agent:
+- Sensors: Cameras and infrared range finders
+- Actuators: Various motors
+Agents are everywhere! (Thermostat, cell phone, vacuum, robot, Echo, etc.)
+
+Rationality is relative to a performance measure
+
+PEAS stands for:
+Performance, Environment, Actuators, Sensors
+
+PEAS for a self-driving car:
+P: safety, time, legal drive, comfort
+E: Roads, other cars, pedestrians, road signs
+A: Steering, accelerator, brake, signal, horn
+S: Camera, sonar, GPS, speedometer, odometer, accelerometer, etc.
+
+Environment types:
+Fully observable vs partially: Does agent's sensors give it access to the 
+complete state of the environment at each point in time?
+Deterministic vs stochastic: Is the next state of the environment 
+completely determined by the current state and the action executed by the agent?
+Episodic vs. sequential: Is the agent's experience divided into atomic episodes
+where the choice of action in each episode depends only on the episode itself?
+Static vs dynamic - Is the environment unchanged while the agent is deliberating?
+Discrete vs continuous - Are there a limited number of distinct, clearly
+defined percepts and actions (e.g checkers vs self-driving car)?
+Single agent vs multi - Is the agent operating by itself in the environment?
+Known vs unknown - Does the designer of the agent have knowledge about the environment makeup?
+
+Four basic agent types (in order of increasing generality):
+- Simple reflex agents
+- Model-based reflex agents
+- Goal-based agents
+- Utility-ased agents
+
+Simple relfex agents:
+- Based only on the current state
+- simple but limited
+- Will only work if the environment is fully observable, based on current percept only
+
+Model-based reflex agents:
+- Handle partial observability by keeping track of the part of the world 
+it can't see now.
+- Internal state depending on percept history (best guess)
+- Model of the world based on how the world evolves independently of agent 
+and how agent actions affect the world
+
+Goal-based agents
+- Knowing the current state of the environment is not enough. The agent needs
+some goal information.
+- Program combines the goal information with the environment model to choose
+the actions that achieve that goal
+- Consider the future, "What will happen if I do A?"
+- Flexible as knowledge supporting the decisions is explicityly represented
+and can be modified
+
+Utility-based agents:
+- Sometimes achieving the desired goal is not enough. We may look for quicker,
+safer, cheaper trip to reach a destination
+- Agent happiness should be taken into consideration. Called utility
+- Because world is uncertain, a utility agent choses the action that
+maximizes the expected utility.
+
+Learning agents:
+- Programming agents by hand can be very tedious
+- Four conceptual components:
+-- Learning element: responsible for making improvements
+-- Performance element: responsible for selecting external actions (what 
+we have considered as an agent so far)
+-- Critic: how well is agent doing w.r.t a performance standard
+-- Problem generator: allows the agent to explore
+
+Agent organization:
+a) Atomic representation: Each world state is a black-box that has no internal structure
+b) Factored Representation: Each state has some attribue-value properties,
+E.g. GPS location, gas in tank, etc.
+c) Structured representation: Relationships between the objects of a state can
+be explicityly expressed. 
+
+Search Agents
+
+Problem solving as search
+1. Define the problem through:
+a) goal formulation
+b) problem formulation
+2. Solving the problem as 2-stage process:
+a) search: "mental" or "ofline exploration of several possibilities
+b) execute the solution found
+
+Problem formulation:
+Initial state - state in which agent starts
+States - all states reachable from initial state by any actions (State space)
+Actions - possible actions available to the agent. At a state s, 
+Actions(s) returns the set of actions that can be executed (Action space)
+Transistion model: a description of what each action does Results(s, a)
+Goal test: determines if a given state is a goal state
+Path cost:funciton that assigns a numeric cost to a path with performance measure.
+
+Real-world examples of earch problems
+
+Route finding problem, traveling salesperson problem, VLSI layout 
+(position millions of chip components and connections to min areas and delays)
+Robot navigation, automatic assembly sequencing, protein design
+
+State space vs. search space:
+state space is a physical configuration, search space is an abstract 
+configuration represented by search tree or graph of poss solutions
+
+Search tree: models the sequence of actions:
+- root: initial state
+- branches: actions
+- Nodes: results from actions. A node has: parent, children, depth, path cost,
+and associated state in the state space.
+
+Search space is divided into three regions:
+1. explored (aka closed list, visited set)
+2. Frontier (aka open list, the fringe)
+3. unexplored
+
+The essence of search is moving nodes from regions (3) to (2) to (1). 
+Strategy is deciding the order of such moves.
+
+Outling of tree search:
+
+function TREE-SEARCH(initialState, goalTest):
+	returns SUCCESS or FAILURE
+	initialize frontier with initialState
+	while not frontier.isEmpty():
+		state = frontier.remove()
+		if goalTest(state):
+			return SUCCESS(state)
+		for neighbor in state.neighbors():
+			frontier.add(neighbor)
+	return FAILURE
+
+You can handle revisiting states by changing to graph search.
+
+function GRAPH-SEARCH(initialState, goalTest):
+	returns SUCCESS or FAILURE
+	initialize frontier with initialState
+	explored = Set.new()
+	while not frontier.isEmpty():
+		state = frontier.remove()
+		explored.add(state)
+		if goalTest(state):
+			return SUCCESS(state)
+		for neighbor in state.neighbors():
+			if neighbor not in frontier or explored:
+				frontier.add(neighbor)
+	return FAILURE
+
+Search stratedy is defined as picking the order of node expansion
+
+Strategies are evaluated with following dimensions:
+- Completeness: does it always find solution if exists?
+- Time complexity: number of nodes generated/expanded
+- Space complexity: maximum number of nodes in memory
+- Optimality: doe sit always find a least-cost solution?
+
+Time and space complexity are measured in terms of:
+- b: maximum branching factor of search tree (actions per state)
+- d: depth of solution
+- m: maximum depth of the state space (may be infinite)
+
+Two kinds of search: Informed and Uninformed
+
+Uninformed search:
+Use no domain knowledge!
+Strategies:
+Breadth-first search (BFS): expand shallowest node
+Depth-first search (DFS): Expand deepest node
+Depth-limited search (DLS): depth first with depth limit
+Iterative -deepening search (IDS): DLS with increasin limit
+Uniform-cost search (UCS): Expand least cost node
+
+BFS search
+
+function BREADTH-FIRST-SEARCH(initialState, goalTest):
+	returns SUCCESS or FAILURE
+
+	frontier = Queue.new(initialState)
+	explored = Set.new()
+
+	while not frontier.isEmpty():
+		state = frontier.dequeue()
+		explored.add(state)
+
+		if goalTest(state):
+			return SUCCESS(state)
+		
+		for neighbor in state.neighbors():
+			if neighbor not in frontier or explored:
+				frontier.enqueue(state)
+	return FAILURE
+
+Enqueue is putting things into the rear of queue, dequeue takes from the 
+front of the queue (FIFO)
+
+Complete: Yes (if b is finite)
+Time: 1 + b + b^2 + b^3 ... + b^d = O(b^d)
+Space: O(b^d)
+Optimal: Yes if cost = 1 per step, else not necessarily
+implementation: FIFO(Queue)
+Question: If time and space complexities are exponential, why use BFS?
+Some solutions are so shallow, then BFS makes sense. But in general you
+probably shouldn't. If depth of solution gets deep (even after 10) it can
+quickly start taking a computer years to complete with not enough memory
+
+
+DFS
+
+Expand deepest first
+
+function DEPTH-FIRST-SEARCH(initialState, goalTest):
+	returns SUCCESS or FAILURE
+
+	frontier = Stack.new(initialState)
+	explored = Set.new()
+
+	while not frontier.isEmpty():
+		state = frontier.pop()
+		explored.add(state)
+
+		if goalTest(state):
+			return SUCCESS(state)
+		
+		for neighbor in state.neighbors():
+			if neighbor not in frontier or explored:
+				frontier.push(state)
+	return FAILURE
+
+Do not use queue because it uses FIFO, we want LIFO in DFS
+
+Complete: No, fails in infinite-depth searches, but complete in finite
+Time O(b^m) 1 + b + b^2 ... b^m. Bas if m is larger than d! but if solutions
+are dense, may be much faster than BFS
+Space O(bm), linear space complexity! (only needs to store single path 
+from root to leaf node along with remaining unexpanded sibling nodes for
+each node in path)
+Optimal: No
+implementation: LIFO (stack)
+DFS uses less memory than BFS
+DFS with depth limit l means you stop once you reach that l, Iterative 
+deepening is when you increase l if you do not find a solution
+
+DLS
+
+If we have knowledge about the problem, maybe we don't need to go full depth
+Iterative deepening combines benefits of BFS and DFS
+Idea: iteratively increase search limit until depth of the shallowest solution d is reached
+Applies DLS with increasing limits
+Because most of the nodes are on the bottom of the search tree, it is
+not a big waste to iteratively re-generate the top
+
+Uniform-cost search
+
+The arcs in a search graph may have different costs. We want the 
+cheapest, not shallowest solution.
+Modify BFS to prioritize cost not depth -> expand node n with the
+lowest path cost g(n).
+
+function UNIFORM-COST-SEARCH(initialState, goalTest):
+	returns SUCCESS or FAILURE
+
+	frontier = Heap.new(initialState)
+	explored = Set.new()
+
+	while not frontier.isEmpty():
+		state = frontier.deleteMin()
+		explored.add(state)
+
+		if goalTest(state):
+			return SUCCESS(state)
+		
+		for neighbor in state.neighbors():
+			if neighbor not in frontier or explored:
+				frontier.insert(state)
+			else if neighbor in frontier:
+				frontier.decreaseKey(neighbor)
+
+	return FAILURE
+
+A heap orders by cost instead of FIFO or LIFO
+
+U-cost search criteria
+Complete: Yes if solution has a finite cost
+Time: Suppose C* cost of optimal solution
+every action costs at least epsilon
+The effective depth is roughly C*/epsilon
+-O(b^(c*/epsilon))
+Space: # of nodes where cost is less than optimal solution
+Optimal: Yes
+Implementation: queue ordered by path cost g(n) lowest first = heap
+
