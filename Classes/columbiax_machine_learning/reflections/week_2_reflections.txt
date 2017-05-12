@@ -1,0 +1,66 @@
+Continuing discussion of linear regression.
+
+Goal is to find a function f that outputs x to y. The regression method is 
+called linear if the prediction f is a linear function of parameters. 
+Remember, you can have not linear parameters so it does not have
+to be linear. 
+
+Least squares also has an insightful probabilistic interpretation that
+allows us to analyze its properties. 
+
+Even though the "expected" maximum likelihood is the correct one, 
+should we actually expect to get something near it? E.g., if the
+variance is huge. We should also look at the covariance. When 
+variance is high, the weights we get from least squared is very
+sensitive to the measured data y.
+
+Ridge regression is a linear regression model, similar to least
+squares. In general, when developing a mpdel for data, we
+often wish to constrain the model parameters in some way.
+Ridge regression adds regularization. Add lambda * weight
+vector magnitude (squared).
+
+Ridge regression is one possible regularization scheme. However,
+if the scale of values in X is different, ridge regression will
+penalize weights on smaller values more. This is where we have to 
+consider data preprocessing. 
+
+If dimensions of x are highly correlated having more does not really help.
+The ridge regression ends up being a matrix times the least squares
+solution. We should expect the ridge regression solution to have
+smaller magnitude/
+
+Ridge regression can be seen as a special case of least squares.
+
+Bias vs variance for linear regression
+The least squares solution is unbiased but potentially has very high
+variance. By contrast, ridge regression is biased but will (potentially) 
+have lower variance.
+Ultimately, what we really care about is how well our solution 
+generalizes to new data.
+
+Imagine I know X, and new xs, and some true underlying w. Generate ys 
+with variance, then compute w for lsr and rr. How well we expect to 
+do on new data, given algorithm we trained with any model, is made
+up of Gaussian noise (which we can never control), bias (how close to the
+solution we expect to be on average), and variance (how sensitive our 
+solution is to the data). So we want to find good tradeoffs between bias
+and variance.
+
+An easier way to evaluate the model is to use cross-validation.
+The procedure for K-fold cross-validation is very simple:
+1. Randomly split data into K roughly equal groups
+2. Learn the model on K -1 groups and predict the held out Kth group
+3. Do this K times, holding out each group once
+4. Evaluate performance using the cumulative set of predictions
+
+For the case of regularization parameter lambda, the above sequence
+can be run for several values to find the best one.
+
+Bayes Rule
+
+Very general, useful way of quantifying our uncertainty in model parameters.
+When we use lambda we are saying that regularization helps
+find values of w we consider to be good by penalizing high
+variance predicitions from least squares. 
+Using probability we can frame this via Bayes rule.
