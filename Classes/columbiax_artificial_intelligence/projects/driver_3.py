@@ -103,7 +103,7 @@ def main():
             current_node = frontier.get()
             if current_node.is_goal():
                 output_file = open('output.txt', 'w')
-                output_file.write('path_to_goal: {}\ncost_of_path: {}\nnodes_expanded: {}\nsearch_depth: {}\nmax_search_depth: {}\nrunning_time: {}\nmax_ram_usage: {}'.format(find_path(current_node, []), len(find_path(current_node, [])), expanded_nodes, current_node.search_depth, maximum_search_depth, time.time()-start_time, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000.0))
+                output_file.write('path_to_goal: {}\ncost_of_path: {}\nnodes_expanded: {}\nsearch_depth: {}\nmax_search_depth: {}\nrunning_time: {:0.8f}\nmax_ram_usage: {:0.8f}'.format(find_path(current_node, []), len(find_path(current_node, [])), expanded_nodes, current_node.search_depth, maximum_search_depth, time.time()-start_time, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000.0))
                 output_file.close()
                 sys.exit()
 
@@ -118,13 +118,16 @@ def main():
 
             if current_node.is_goal(): 
                 output_file = open('output.txt', 'w')
-                output_file.write('path_to_goal: {}\ncost_of_path: {}\nnodes_expanded: {}\nsearch_depth: {}\nmax_search_depth: {}\nrunning_time: {}\nmax_ram_usage: {}'.format(find_path(current_node, []), len(find_path(current_node, [])), expanded_nodes, current_node.search_depth, maximum_search_depth, time.time()-start_time, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000.0))
+                output_file.write('path_to_goal: {}\ncost_of_path: {}\nnodes_expanded: {}\nsearch_depth: {}\nmax_search_depth: {}\nrunning_time: {:0.8f}\nmax_ram_usage: {:0.8f}'.format(find_path(current_node, []), len(find_path(current_node, [])), expanded_nodes, current_node.search_depth, maximum_search_depth, time.time()-start_time, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1000.0))
                 output_file.close()
                 sys.exit()
 
             expanded_nodes += 1
 
             explored_and_frontier_states, frontier, maximum_search_depth = current_node.queue_child_nodes(explored_and_frontier_states, 'dfs', frontier, maximum_search_depth)
+
+
+
 
 
 
