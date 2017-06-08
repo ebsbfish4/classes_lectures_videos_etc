@@ -1,0 +1,77 @@
+Have a vector y and covariates matrix X, the ith row of y and
+X correspond to the ith observation.
+
+In a Bayesian setting, we model this data as:
+Likelihood: y ~ N(Xw, sigma^2 I)
+Prior: w ~ N(0, lambda^-1I)
+
+The unknown model variable is w:
+- The "likelihood model" says how well the observed data 
+agrees with w
+- The "model prior" is our prior belief (constraints) on w
+
+This is called Bayesian linear regression because we have 
+defined a prior on the unknown parameter and will try to 
+learn its posterior.
+
+MAP solution (Maximum A Posteriori):
+- Map inference returns the maximum of the log joint 
+likelihood
+Joint Likelihood: p(y, w|X) = p(y|w, X)p(w)
+- Using Bayes rule that this point also maximizes the 
+posterior of w
+
+We want to return the value of w that maximizes both the 
+likelihood of the data and the model variable.
+
+MAP solution corresponds to the ridge regression solution.
+
+Point Estimates vs Bayesian Inference:
+Point estimates - wMAP and wML are referred to as point 
+estimates of hte model parameters.
+They find a specific value (point) of the vector w that
+maximizes an objective function (MAP or ML)
+- ML: Only consider data model p(y|w,X)
+- MAP: Takes into account model prior: 
+----- p(y, w|x) = p(y|w, X)p(w)
+
+Bayesian inference - Bayesian inference goes one step further
+by characterizing uncertainty about the values in w using 
+Bayes rule. (It returns a distribution of w)
+
+Posterior calculation:
+Since w is a continuous-valued random variable in R^d, Bayes 
+rule says that the posterior distribution of w given y, X is
+
+p(w|y, X) = [p(y|w, X)p(w)] / integral(numerator*dw)
+
+That is, we get an updated distribution on w through the 
+transition
+prior -> likelihood -> posterior
+
+Quote" "The posterior of _ is proportional to the likelihood 
+times the prior"
+
+Bayesian linear regression:
+In this case we can update the posterior distribution 
+p(w|y, X) analytically
+
+The posterior is proportional to (in the slides) and
+we need to normalize that function
+
+... (slides)
+
+we can conclude that p(w|y, X) is Gaussian. Why?
+We can multiply and divide by anything not involving w
+
+The mean in Bayes and MAP solution are equal
+Sigma captures uncertainty about w 
+
+Predictive distribution is the likelihood of something 
+new for a particular w and weighting it by our current 
+belief about w. We then sum (integrate) over all possible 
+values of w.
+
+When we predict the expected value is the same as the MAP 
+prediction, but we now quantify our confidence in this 
+prediction with the variance sigma^2
