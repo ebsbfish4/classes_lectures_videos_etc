@@ -6332,7 +6332,7 @@
 0 0 24 29 1 #"\n"
 0 0 17 3 27 #";; - atomic distinct: empty"
 0 0 24 29 1 #"\n"
-0 0 17 3 37 #";; compund: (cons School ListOfSchool"
+0 0 17 3 39 #";; - compund: (cons School ListOfSchool"
 0 0 24 29 1 #"\n"
 0 0 17 3 35 #";; - reference: (first lob) is Bear"
 0 0 24 29 1 #"\n"
