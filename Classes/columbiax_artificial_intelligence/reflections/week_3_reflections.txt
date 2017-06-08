@@ -1,0 +1,242 @@
+Informed search:
+- Are we getting close to the goal?
+- Use a heuristic function that estimates how close a state is to the goal
+- A heuristic does NOT have to be perfect!
+- Examples of strategies:
+1. Greedy best-first search
+2. A* search
+3. IDA*
+
+In the example pf travelling between cities, the straight line distance
+between two cities could be one heuristic
+
+Greedy search algorithm:
+
+function Greedy-Best-First-Search(initialState, goalTest):
+
+	frontier = Heap.new(initialState)
+	explored = Set.new()
+
+	while not frontier.isEmpty():
+		state = frontier.deleteMin()
+		explored.add(state)
+
+		if goalTest(state):
+			return Success(state)
+
+		for neighbors in state.neighbors():
+			if neighbor not in frontier or explored:
+				frontier.insert(state)
+			else if neighbor in frontier:
+				frontier.decreaseKey(neighbor)
+
+	return Failure
+
+Greedy search does a better job, but it will not always find the 
+best path.
+
+A* search
+- minimizes the total estimated solution cost
+- combines:
+-- g(n) cost to reach node n
+-- h(n) cost to get from n to goal
+-- f(n) = g(n) + h(n)
+-- f(n) is the estimated cost of the cheapest solution through n
+
+A* search algorithm is similar to UCS and greedy:
+
+function A-Star-Search(initialState, goalTest):
+	# cost f(n) = g(n) + h(n)
+
+	frontier = Heap.new(initialState)
+	explored = Set.new()
+
+	while not frontier.isEmpty():
+		state = frontier.deleteMin()
+		explored.add(state)
+
+		if goalTest(state):
+			return Success(state)
+
+		for neighbors in state.neighbors():
+			if neighbor not in frontier or explored:
+				frontier.insert(state)
+			else if neighbor in frontier:
+				frontier.decreaseKey(neighbor)
+
+	return Failure
+
+A* search will always find optimal unlike greedy (as long as there
+is a good heuristic)
+
+A good heuristic must be admissible:
+- an admissible heuristic never overestimates the cost to reach 
+the goal, that is it is optimistic
+- a heuristic is admisibble if the heuristic is always less than
+or equal to the true cost to reach the goal 
+- The heuristic used in the map example is admissible because the
+straight-line0distance is by definition the shortest distance 
+between two points. 
+
+A* search criteria:
+complete - yes
+time - exponential
+space - keeps every node in memory, biggest problem
+optimal - yes
+
+In 8-tile heuristic could be
+h1(n) = number of misplaced tiles
+h2(n) = total Manhattan distance (sum of the horizontal and 
+vertical distances)
+
+So, if h(n) is admissible, A* using tree search is optimal
+Rationale:
+- Suppose Go is the optimal goal
+- Suppose Gs is some suboptimal goal
+- Suppose n is an unexpanded node in the fringe such that n is on 
+the shortest path to Go
+- f(Gs) = g(Gs) since h(Gs) = 0
+- f(Go) = g(Go) since h(Go) = 0
+- f(Gs) > g(Go) since Gs is suboptimal
+- Then f(Gs) > f(Go) ... (1)
+- h(n) <= h*(n) since h is admissible
+- g(n) + h(n) <= g(n) + h*(n) = g(Go) = f(Go)
+- Then, f(n) <= g(Go) ... (2)
+- from (1) and (2) f(Gs) > f(n)
+- so A* will never select Gs during the search and hence A* is 
+optimal
+
+Search Algorithms Recap
+
+Uninformed search no domain knowledge:
+BFS, DFS, DLS, IDS< UCS
+Informed search uses a heuristic function that estimates how 
+close a state is to the goal.
+Greedy search, A*, IDA*
+
+Local Search:
+
+- Search algorithms seen so far are designed to explore search
+spaces systematically
+- Problem: observable, deterministic, known environments where
+the solution is a sequence of actions
+- Real-World problems are more complex
+- When a goal is found, the path to that goal constitutes a 
+solution to the problem. But, depeonding on the applications, 
+the path may or may not matter
+- If the path does not matter/systematic search is not possible, 
+then consider another class of algorithms
+- In such cases, we can uses iterative mprovement algorithms,
+ Local search.
+ - Also useful in pure optimization problems where the goal is
+ to find the best state according to an optimization function.
+ - Examples:
+ -- Integrated circuit design, telecommunications network 
+ optimization, etc.
+-- N-puzzle or 8-queen: what matters is the final configuration 
+of the puzzle, not the intermediary steps to reach it.
+
+- Idea of local search is to keep a single "current" state, and
+then try to improve it.
+- Move only to neighbors of that node
+- Advantages:
+-- No need to maintain a search tree
+-- Use very little memory
+-- Can often find good enough solutions in continuous or large 
+state spaces
+
+- Local Search Algorithms:
+-- Hill climbing (steepest ascent/descent)
+-- Simulated Annealing: inspirded by statistical physics
+-- Local beam search
+-- Genetic algorithms: inspired by evolutionary biology
+
+Hill climbing:
+- Also called greedy local search
+- Looks only to immediate good neighbors and not beyond
+- Search moves uphill: moves in the direction of increasing 
+elevation/value to find the top of objective function
+- Terminates when it reaches a pick
+- Can terminate with a local maximum, global maximum or can get
+stuck and no progress is possible
+- A node is a state and a value
+
+Hill climbing algorithm:
+
+function Hill-Climbing(initialState):
+	# returns State that is a local maximum
+
+	initialize current with initialState
+
+	loop do:
+		neighbor = a highest-valued successor of current
+
+		if neighbor.value <= current.value:
+			return current.state
+
+		current = neighbor
+
+Hill climbing variants:
+- Sideways moves: escapes from plateaux where best successor has
+same value as the current state
+- Random-restart: hill climbing overcomes local maxima: keep 
+trying! (either find a goal or get several possible solutions and 
+pick the max).
+- Stochastic: hill climbing chooses at random among the uphill 
+moves
+
+Hill climbing is effective in general but depends on the shape of 
+the landscape
+Successful in many real-world problems after a reasonable number
+of restarts
+Local beam search maintains k states instead of one state
+Select the k best sucessor, and useful information is passed 
+among the states
+Stochastic beam search chooses k successors are random
+Helps alleviate the problem of the states collecting around the 
+same part of the state space.
+
+Genetic algorithms:
+- Genetic algorithms is a variant of stochastic beam search
+- Successor states are generated by combining two parents rather 
+than by modifying a single state
+- The process is inspired by natural selection
+- Starts with k randomly generated states, called population. Each
+state is an individual
+- An individual is usually represented by a string of 0s and 1s, 
+or digits, a finite set
+- The objective function is called a fitness function: better 
+states have high values of fitness funciton
+- pairs of individuals are selected at random for reproduction 
+w.r.t some probabilities
+- a crossover point is chosen randomly in the string
+- offspring are created by crossing the parents at the crossover 
+point
+- Each element in the string is also subject to some mutation with
+a small probability
+
+function Genetic-Algorithm(population, fitness-function)
+	# returns an individual
+
+	repeat
+
+		initialize new population with empty set
+
+		for i = 1 to size(population) do:
+
+			x = random-select(population, fitness-function)
+			y = random-select(population, fitness-function)
+			child = cross-over(x,y)
+			mutate (child) with a small random probability
+			add child to new-population
+
+		population = new-population
+
+	until some individual is fit enough or enough time has elapsed
+
+	return the best individual in population w fitness-function
+
+
+
+
+

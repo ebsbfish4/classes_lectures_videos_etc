@@ -1,0 +1,280 @@
+Adversarial Search:
+- Adversarial search problems = games
+- They occur in mltiagent competitive environments
+- There is an opponent we can't control planning against us
+- Game vs. search: optima solution is not a sequence of actions, but 
+a strategy. If opponent does a, agent does b, else if opponent does 
+c, agent does d, etc.
+- Tedious and fragile if hard-coded
+- Good news: games are modeled as search problems and use heuristic 
+evaluation functions.
+Games: hard topic
+- They are interesting in AI because they are hard to solve
+- Eg search space for chess is 10^154
+- Need to make some decision even when the optimal decision is 
+infeasible
+
+Checkers:
+- Used an endgame database defining perfect play for all positions 
+with 8 pieces or less
+
+Chess:
+- Computers have been defeating top humans
+Go:
+- In 2016 AlphaGo beat both best go players
+Othello:
+- Also performs better than humans
+
+Types of games:
+
+Perfect vs imperfect information, deterministic vs chance
+
+This lectures focuses on perfect information and deterministic games
+
+Zero-sum games:
+- Adversarial: pure competition
+- Agents have different values on the outcomes
+- One agent maximizes one single value while other minimizes it
+- Each move by one of hte players is called a "ply"
+
+Embedded thinking:
+- One agent is trying to figure out what to do
+- Needs to think about opponent as well
+- Each will imagine what the response from there opponent will be
+
+Formalization of embedded thinking:
+- The initial state (s)
+- Player(s): defines which player has the move in state s.
+- Action(s): returns the set of legal moves in s
+- Transition funciton: S * A -> S defines the result of a move
+- Terminal test: True when the game is over, false otherwise.
+- Utility(s, p): utility function for a game that ends in terminal 
+state s for player p. E.g. 1 for win, 0 for tie, -1 for loss.
+
+Single player:
+- Assume we have tic-tac-toe game with one player. Search space of
+all possible boards where he has three moves has some wins and ties.
+- If we add another player the search space must include all possible 
+response moves that opponent makes as well. 
+
+Adversarial search: minimax:
+- Find the optimal strategy for Max:
+-- Depth-first search of the game tree
+-- An optimal leaf node could appear at any depth of the tree
+-- Minimax principle: compute the utility of being in a state assumin
+both players play optimally from there until the end of the game
+-- Propagate minimax values up the tree once terminal nodes are 
+discovered
+-- If state is terminal node: Value is utility(state)
+-- If state is Max node: value is the highest value of all successor 
+node values (children)
+-- If state is Min node: Value is the lowest value of all successor 
+node values (children)
+
+The minimax algorithm:
+
+# Find the child state with the lowest utility value
+function Minimize(state):
+	returns Tuple of <State, Utility>
+
+	if Terminal_Test(state):
+		return <Null, Eval(state)>
+
+	<minChild, minUtility> = <Null, infinity>
+
+	for child in state.children():
+		<_, utility> = Maximize(child)
+
+		if utility < minUtility:
+			<minChild, minUtility> = <child, utility>
+
+	return <minChild, minUtility>
+
+# Find the child state with the highest utility value
+function Maximize(state):
+	returns Tuple of <State, Utility>
+
+	if Terminal_Test(state):
+		return <Null, Eval(state)>
+
+	<maxChild, maxUtility> = <Null, -infinity>
+
+	for child in state.children():
+		<_, utility> = Minimize(child)
+
+		if utility < maxUtility:
+			<maxChild, maxUtility> = <child, utility>
+
+	return <maxChild, maxUtility>
+
+# Find the child state with the highest utility value
+function Decision(state):
+	returns State
+
+	<child, _> = Maximize(state)
+	return child
+
+
+Properties of minimax:
+- Optimal (opponent plays optimally) and complete (finite tree)
+- DFS time: O(b^m)
+- DFS space: O(bm)
+- Tic-Tac-Toe
+-- about 5 legal moves on average, total og 9 moves (9 plies)
+-- 5^9 = 1,953,125
+-- 9! = 362,880 terminal nodes
+- Chess
+-- b approx. = 35 (average branching factor)
+-- d approx. = 100 (depth of game tree for a typical game)
+-- b^d approx. = 35^100 approx. = 10^154 nodes
+- Go branching factor starts at 361 (19x19 board)
+
+Case of limited resources:
+- Problem: in real games, we are limited by time so we cant search 
+all leaves
+- To be practical and run in a reasonable amount of time, minimax can 
+only search to some depth
+- More plies makes a big difference
+- Solution:
+-- Replace terminal utilities with an evaluation function for 
+non-terminal nodes
+-- Use Iterative Deepening Search
+-- Use pruning: eliminate large parts of the tree
+
+Alpha-Beta pruning is a popular form of pruning.
+The basic idea of this is that if you have already found a minimum 
+lower than the maximum minimum found in another node, you do not need 
+to keep exploring that node.
+
+Alhpa-Beta pruning:
+- Strategy: Just like minimax, it performs a DFS
+- Parameters: Keep track of two bounds:
+-- alpha: largest value for Max across seen children (current lower 
+bound on MAX's outcome)
+-- beta: lowest value for MIN across seen children (current upper 
+bound on MIN's outcome)
+- Initialization: alpha=-infinity, B=infinity
+- Propogation send alpha and beta down during the search to be used 
+for pruning
+-- Updata both values by propagating upwards values of terminal nodes
+-- Updata alpha only at Max nodes and update beta only at Min nodes.
+-Pruning prune any remaining branches whenever alpha >= beta
+
+Alhpa-Beta pruning code (very similar to regular minimax):
+
+# Find the child state with the lowest utility value
+function Minimize(state, alpha, beta):
+	returns Tuple of <State, Utility>
+
+	if Terminal_Test(state):
+		return <Null, Eval(state)>
+
+	<minChild, minUtility> = <Null, infinity>
+
+	for child in state.children():
+		<_, utility> = Maximize(child, alpha, beta)
+
+		if utility < minUtility:
+			<minChild, minUtility> = <child, utility>
+
+		if minUtility <= alpha:
+			break
+
+		if minUtility < beta:
+			beta = minUtility
+
+	return <minChild, minUtility>
+
+# Find the child state with the highest utility value
+function Maximize(state, alpha, beta):
+	returns Tuple of <State, Utility>
+
+	if Terminal_Test(state):
+		return <Null, Eval(state)>
+
+	<maxChild, maxUtility> = <Null, -infinity>
+
+	for child in state.children():
+		<_, utility> = Minimize(child, alpha, beta)
+
+		if utility < maxUtility:
+			<maxChild, maxUtility> = <child, utility>
+
+		if maxUtility >= beta:
+			break
+
+		if maxUtility > alpha:
+			alpha = maxUtility
+
+	return <maxChild, maxUtility>
+
+
+# Find the child state with the highest utility value
+function Decision(state):
+	returns State
+
+	<child, _> = Maximize(state, -infinity, infinity)
+	return child
+
+
+Another important aspect of alhpa-beta pruning is the 
+move ordering. The main idea of ordering is to examine
+first successors that are likely best.
+
+Move ordering:
+- worst ordering: no pruning happens (best moves on right of the 
+game tree). Complexity O(b^m)
+- Ideal ordering: lots of pruning happens (best moves are on the 
+left of the game tree). This solves tree twice as deep as minimax in 
+the same amount of time. Complexity O(b^(m/2)) in practice. The search
+can go deeper in the game tree.
+- How to find good ordering?
+-- Remember the best moves from shallowest nodes
+-- Order the nodes so as the best are check first
+-- Use domain knowledge: e.g. for chess try the order:
+--- captures first, then threats, then forward moves, backward moves
+-- Bookkep the states, they may repeat!
+
+Real-time decisions:
+- Minimax generates the entire game search space
+- alpha-beta algorithm prunes large chunks of the trees
+- But it still has to go all the way to the leaves
+- Impractical in real-time
+- Solution bound the depth of search and replace utility(s) with
+eval(s), an evaluation function to estimate value of current board 
+configurations
+-- eg othello white pieces - black pieces, chess value of white pieces
+minus value of black pieces
+- An ideal evaluation function would rank terminal states in the same
+way as the true utility funciton but must be fast
+- Typical to define features and make the funciton a linear weighted 
+sum of the features
+- Use domain knowledge to craft the best and useful features
+
+Stochastic games:
+- Include a random element
+- Include chance nodes
+- Backgammon, old board game combining skill and chance
+- Goal is that each player tries to move all pieces off the board
+- Each node now will include a chance of that node occurring.
+- Algorithm Expectminimax handles chance nodes by calculating expected
+chance along with each value.
+
+Conclusion:
+- Games are modeled in AI as search problem and uses heuristic to 
+evaluate the game
+- Minimax algorithm choses the best move given an optimal play from 
+opponent
+- Minimax goes all the way down the tree which is not practical 
+given game time constraints
+- Alpha-beta pruning can reduce the game tree search whill allows us 
+to go deeper in the tree within the time constraints
+- Pruning, bookkeeping, evaluation heuristics, node re-ordering and
+IDS are effective in practice
+- Devising adversarial search agents is challenging because of huge
+search space
+- We just scratched the surface of this topic
+- Further topics include partially observable games
+- Except for robot football there wasnt much interest from AI in
+physical games
+
