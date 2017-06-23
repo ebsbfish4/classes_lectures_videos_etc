@@ -1,0 +1,31 @@
+Data Science Process
+1. Data collection
+2. Data Preparation
+3. Explorative data analysis
+4. Machine Learning
+5. Visualization
+
+K-nearest neighbors:
+Uses similarity between examples
+Assumption: Two similar examples should have same labels
+Assume all examples are points in the d dimensional space
+Uses standard Euclidean distance
+
+Pros and cons of KNN?
+Pros -
+-- Simple to implement
+-- Works well in practice
+-- No model or assumptions
+-- Extended easily to new examples
+Cons -
+-- Requires large space to store the entire dataset
+-- Slow! O(n*d) (examples and features)
+-- suffers from the curse of dimensionality
+
+Beware of over and under fitting
+
+Overfitting -
+-- Reduce the number of features
+-- Do a model selection
+-- Use regularization
+-- Do cross-validation

@@ -1,0 +1,5 @@
+A linear classifier takes a vector and a scalar and predicts the label of an observation
+Least squares - sensitive to outliers
+Perceptron - Convergence issues, assume linear seperability
+
+Linear discriminant analysis
